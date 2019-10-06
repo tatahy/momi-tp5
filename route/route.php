@@ -22,10 +22,10 @@ Route::get('demo', 'index/demo');
 
 //方式2，数组方式注册路由分组，都支持跨域请求
 Route::group('',[
-    'conf'=>'appConfig',
+    'conf'=>'appConf',
     'env'=>'appEnv',
-    'serv'=>'servInfo',
-    'ent/:name'=> 'entInfo'
+    'serv'=>'appServ',
+    'ent/:name'=> 'appEnt'
 ])->method('GET|POST')
   ->header('Access-Control-Allow-Origin','*')
   ->header('Access-Control-Allow-Credentials', 'true')
