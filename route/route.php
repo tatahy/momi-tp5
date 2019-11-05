@@ -25,11 +25,25 @@ Route::group('',[
     'conf'=>'appConf',
     'env'=>'appEnv',
     'serv'=>'appServ',
-    'ent/:name'=> 'appEnt'
+    'supply'=>'appSupply',
+    'ent/:name'=> 'appEnt',
+	
 ])->method('GET|POST')
   ->header('Access-Control-Allow-Origin','*')
   ->header('Access-Control-Allow-Credentials', 'true')
   ->allowCrossDomain();
+  
+Route::group('system',[
+    ''=>'/index',
+	'conf'=>'/conf',
+    'env'=>'/env',
+    'serv'=>'/serv',	
+])->method('GET|POST')
+	//system模块index控制器
+	->prefix('system/index')
+  	->header('Access-Control-Allow-Origin','*')
+  	->header('Access-Control-Allow-Credentials', 'true')
+  	->allowCrossDomain();
   
 ////支持跨域请求
 //Route::get('conf', 'index/appConfig')

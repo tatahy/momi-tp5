@@ -17,15 +17,6 @@ class Index extends Controller
         return $this->fetch(Env::get('ROOT_PATH') . '/public/admin.html'); 
     }
     
-    private function kSortArr($arr=[])
-    {
-      if(count($arr)){
-        ksort($arr);
-        return $arr;
-      }
-      
-    }
-
     public function hello($name = 'ThinkPHP5')
     {
         return 'hello,' . $name;
@@ -41,7 +32,7 @@ class Index extends Controller
     {
         //读取所有的配置参数
         //return dump(Config::get());
-        $arr=$this->kSortArr(Config::get());
+        $arr=fn_com_ksort_arr(Config::get());
         return json_encode($arr);
     }
 
@@ -49,7 +40,7 @@ class Index extends Controller
     {
         //读取所有的环境变量
         //return dump(Env::get());
-        $arr=$this->kSortArr(Env::get());
+        $arr=fn_com_ksort_arr(Env::get());
         return json_encode($arr);
     }
 
@@ -57,21 +48,29 @@ class Index extends Controller
     {
         //读取所有的服务器参数
         //return dump($_SERVER);
-        $arr=$this->kSortArr($_SERVER);
+        $arr=fn_com_ksort_arr($_SERVER);
         return json_encode($arr);
     }
     
     public function appEnt(Request $request)
     {
         $name=($request->has('name'))?$request->param('name'):'pat';
-        $entType = ['pat', 'pro', 'the'];
-        $result = ['ent' => $name,'list'=>[]];
+        $entType = ['pat', 'ach'];
+        $result = ['ent' => $name,'fields'=>[],'items'=>[]];
 
         if ($name == 'pat')
         {
-            $result['list']= Pat::getPatList();
+            $result= array_merge($result,Pat::getPatList());
         }
         
         return json_encode($result);
     }
+	public function appSupply()
+    {
+        ///读取所有的环境变量
+        //return dump(Env::get());
+        $arr=fn_com_ksort_arr(Env::get());
+        return json_encode($arr);
+    }
+	
 }
