@@ -25,7 +25,6 @@ Route::group('',[
     'conf'=>'appConf',
     'env'=>'appEnv',
     'serv'=>'appServ',
-    'supply'=>'appSupply',
     'ent/:name'=> 'appEnt',
 	
 ])->method('GET|POST')
@@ -33,14 +32,26 @@ Route::group('',[
   ->header('Access-Control-Allow-Credentials', 'true')
   ->allowCrossDomain();
   
+	
 Route::group('system',[
-    ''=>'/index',
-	'conf'=>'/conf',
-    'env'=>'/env',
-    'serv'=>'/serv',	
+    ''=>'index',
+	'conf'=>'conf',
+    'env'=>'env',
+    'serv'=>'serv',	
 ])->method('GET|POST')
-	//system模块index控制器
-	->prefix('system/index')
+	//admin模块/system控制器/[操作]
+	->prefix('admin/system/')
+  	->header('Access-Control-Allow-Origin','*')
+  	->header('Access-Control-Allow-Credentials', 'true')
+  	->allowCrossDomain();
+	
+Route::group('supply',[
+    ''=>'index',
+	'conf'=>'conf',
+    	
+])->method('GET|POST')
+	//admin模块/supply控制器/[操作]
+	->prefix('admin/supply/')
   	->header('Access-Control-Allow-Origin','*')
   	->header('Access-Control-Allow-Credentials', 'true')
   	->allowCrossDomain();
