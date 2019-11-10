@@ -32,9 +32,10 @@ Route::group('',[
   ->header('Access-Control-Allow-Credentials', 'true')
   ->allowCrossDomain();
   
-	
+//解析前端发送的由‘system’发起的路由字符串	
 Route::group('system',[
     ''=>'index',
+	'index'=>'index',
 	'conf'=>'conf',
     'env'=>'env',
     'serv'=>'serv',	
@@ -44,9 +45,11 @@ Route::group('system',[
   	->header('Access-Control-Allow-Origin','*')
   	->header('Access-Control-Allow-Credentials', 'true')
   	->allowCrossDomain();
-	
+
+//解析前端发送的由‘supply’发起的路由字符串	
 Route::group('supply',[
     ''=>'index',
+	'index'=>'index',
 	'conf'=>'conf',
     	
 ])->method('GET|POST')

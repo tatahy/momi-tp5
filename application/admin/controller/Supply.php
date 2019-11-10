@@ -8,7 +8,7 @@ use think\Request;
 
 class Supply extends Controller
 {
-    private $data=['ent' => 'system','fields'=>[],'items'=>[]];
+    private $data=['ent' => 'supply','fields'=>[],'items'=>[]];
 	/* private $itemsTotal=[
 				['name'=>'sys-conf','value'=>0],
 				['name'=>'sys-env','value'=>0],
