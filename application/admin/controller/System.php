@@ -27,8 +27,9 @@ class System extends Controller
 		$arr['system-conf']=count(fn_com_ksort_arr(Config::get()));
 		$arr['system-env']=count(fn_com_ksort_arr(Env::get()));
 		$arr['system-serv']=count(fn_com_ksort_arr($_SERVER));
-		
 		$this->itemsTotal=$arr;
+		
+		return $this->itemsTotal;
 		
 	}
 	

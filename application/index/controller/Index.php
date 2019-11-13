@@ -6,7 +6,7 @@ use think\facade\Config;
 use think\facade\Env;
 use think\Request;
 
-use app\index\model\Patinfo as Pat;
+use app\patent\model\Patinfo as Pat;
 
 class Index extends Controller
 {

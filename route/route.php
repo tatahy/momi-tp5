@@ -50,11 +50,63 @@ Route::group('system',[
 Route::group('supply',[
     ''=>'index',
 	'index'=>'index',
-	'conf'=>'conf',
+	'pat'=>'pat',
     	
 ])->method('GET|POST')
 	//admin模块/supply控制器/[操作]
 	->prefix('admin/supply/')
+  	->header('Access-Control-Allow-Origin','*')
+  	->header('Access-Control-Allow-Credentials', 'true')
+  	->allowCrossDomain();
+	
+//解析前端发送的由‘demand’发起的路由字符串	
+Route::group('demand',[
+    ''=>'index',
+	'index'=>'index',
+	
+    	
+])->method('GET|POST')
+	//admin模块/supply控制器/[操作]
+	->prefix('admin/demand/')
+  	->header('Access-Control-Allow-Origin','*')
+  	->header('Access-Control-Allow-Credentials', 'true')
+  	->allowCrossDomain();
+	
+//解析前端发送的由‘project’发起的路由字符串	
+Route::group('project',[
+    ''=>'index',
+	'index'=>'index',
+	
+    	
+])->method('GET|POST')
+	//admin模块/supply控制器/[操作]
+	->prefix('admin/project/')
+  	->header('Access-Control-Allow-Origin','*')
+  	->header('Access-Control-Allow-Credentials', 'true')
+  	->allowCrossDomain();
+	
+//解析前端发送的由‘mentor’发起的路由字符串	
+Route::group('mentor',[
+    ''=>'index',
+	'index'=>'index',
+	
+    	
+])->method('GET|POST')
+	//admin模块/supply控制器/[操作]
+	->prefix('admin/mentor/')
+  	->header('Access-Control-Allow-Origin','*')
+  	->header('Access-Control-Allow-Credentials', 'true')
+  	->allowCrossDomain();
+	
+//解析前端发送的由‘expert’发起的路由字符串	
+Route::group('expert',[
+    ''=>'index',
+	'index'=>'index',
+	
+    	
+])->method('GET|POST')
+	//admin模块/supply控制器/[操作]
+	->prefix('admin/expert/')
   	->header('Access-Control-Allow-Origin','*')
   	->header('Access-Control-Allow-Credentials', 'true')
   	->allowCrossDomain();

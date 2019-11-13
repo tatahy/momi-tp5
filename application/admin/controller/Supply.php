@@ -6,6 +6,9 @@ use think\facade\Config;
 use think\facade\Env;
 use think\Request;
 
+use app\patent\model\Patinfo as Pat;
+
+
 class Supply extends Controller
 {
     private $data=['ent' => 'supply','fields'=>[],'items'=>[]];
@@ -15,51 +18,43 @@ class Supply extends Controller
 				['name'=>'sys-serv','value'=>0],
 			]; */
 	private $itemsTotal=[
-				'system-conf'=>0,
-				'system-env'=>0,
-				'system-serv'=>0,
+				'supply-pat'=>0,
+				'supply-pro'=>0,
+				'supply-sol'=>0,
+				'supply-ach'=>0,
 			];
 	
 	public function __construct()
 	{
 		$arr=$this->itemsTotal;
 		
-		$arr['system-conf']=count(fn_com_ksort_arr(Config::get()));
-		$arr['system-env']=count(fn_com_ksort_arr(Env::get()));
-		$arr['system-serv']=count(fn_com_ksort_arr($_SERVER));
-		
+		$arr['supply-pat']=Pat::getPatNum();
+		$arr['supply-pro']=2;
+		$arr['supply-sol']=3;
+		$arr['supply-ach']=4;
 		$this->itemsTotal=$arr;
+		
+		return $this->itemsTotal;
 		
 	}
 	
 	public function index()
     {
-  		
+  		$arr=$this->itemsTotal;
+		
+		//$arr['supply-pat']=count(Pat::getPatList());
+		
     	return json_encode(array_merge(['itemsTotal'=>$this->itemsTotal],$this->data));
 
 	}
 	
-	public function conf()
+	public function pat()
     {
-        //读取所有的配置参数
-        //return dump(Config::get());
-        $arr=fn_com_ksort_arr(Config::get());
-        return json_encode($arr);
+    	 
+    	$result= array_merge($this->data,Pat::getPatList());   
+		
+        return json_encode($result);
     }
 
-    public function env()
-    {
-        //读取所有的环境变量
-        //return dump(Env::get());
-        $arr=fn_com_ksort_arr(Env::get());
-        return json_encode($arr);
-    }
-
-    public function serv()
-    {
-        //读取所有的服务器参数
-        //return dump($_SERVER);
-        $arr=fn_com_ksort_arr($_SERVER);
-        return json_encode($arr);
-    }
+    
 }
