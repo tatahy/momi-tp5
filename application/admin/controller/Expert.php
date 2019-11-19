@@ -9,10 +9,10 @@ use think\Request;
 use app\patent\model\Patinfo as Pat;
 
 
-class Supply extends Controller
+class Expert extends Controller
 {
-    const SYSENT=['pat','pro','sol','ach'];
-	const ENT='supply';
+    const ENT='expert';
+	const SYSENT=['com','gov','edu','dev','ngo','person'];
 	
 	private $brief=[];
 	private $data=[];
@@ -27,13 +27,8 @@ class Supply extends Controller
 		];
 		
 		foreach(self::SYSENT as $key=>$val){
-			$param=Pat::getPatNum();
-			if($val=='pro')$param=0;
-			if($val=='sol')$param=0;
-			if($val=='ach')$param=0;
-			
 			$arr['routeStr'][$key]=self::ENT.'-'.$val;
-			$arr['total'][$key]=$param;
+			$arr['total'][$key]=0;
 		}
 		
 		return $arr;
@@ -42,23 +37,6 @@ class Supply extends Controller
 	
 	public function __construct()
 	{
-		/* $this->itemsTotal=[
-				'supply-pat'=>Pat::getPatNum(),
-				'supply-pro'=>0,
-				'supply-sol'=>0,
-				'supply-ach'=>0,
-			];
-			
-		$this->data=[
-				'ent' => 'supply',
-				'sysEnt'=>'',				
-				'fields'=>[],
-				'items'=>[]
-			];
-			
-		
-		return json_encode($this->itemsTotal); */
-		
 		$this->brief=$this->_setBrief();
 		
 		$this->data=[
@@ -67,51 +45,61 @@ class Supply extends Controller
 			'fields'=>[],
 			'items'=>[]
 		];
-		
+	
 		$this->itemsTotal=array_combine($this->brief['routeStr'],$this->brief['total']);
-		
+			
 	}
 	
 	public function index()
     {
-  		return json_encode(array_merge(
+  	   	return json_encode(array_merge(
 									$this->data,
 									['itemsTotal'=>$this->itemsTotal],
 									['brief'=>$this->brief]
 								)
 							);
-
 	}
 	
-	public function pat()
+	public function com(Request $request)
     {
-    	 
-    	$result= array_merge($this->data,Pat::getPatList());   
+    	$result= array_merge($this->data,['sysEnt'=>'com']);   
 		
         return json_encode($result);
     }
 
-    public function pro()
+    public function gov(Request $request)
     {
-    	 
-    	$result= array_merge($this->data,['sysEnt'=>'pro',]);   
+    	$result= array_merge($this->data,['sysEnt'=>'gov']);   
 		
         return json_encode($result);
     }
 	
-	public function sol()
+	public function edu(Request $request)
     {
-    	 
-    	$result= array_merge($this->data,['sysEnt'=>'sol']);   
+    	$result= array_merge($this->data,['sysEnt'=>'edu']);   
 		
         return json_encode($result);
     }
 	
-	public function ach()
+	public function dev(Request $request)
     {
-    	 
-    	$result= array_merge($this->data,['sysEnt'=>'ach']);   
+    	$result= array_merge($this->data,['sysEnt'=>'dev']);   
 		
         return json_encode($result);
     }
+	
+	public function ngo(Request $request)
+    {
+    	$result= array_merge($this->data,['sysEnt'=>'ngo']);   
+		
+        return json_encode($result);
+    }
+	
+	public function person(Request $request)
+    {
+    	$result= array_merge($this->data,['sysEnt'=>'person']);   
+		
+        return json_encode($result);
+    }
+	
 }

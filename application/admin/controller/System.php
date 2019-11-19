@@ -8,35 +8,67 @@ use think\Request;
 
 class System extends Controller
 {
-    private $data=['ent' => 'system','fields'=>[],'items'=>[]];
-	/* private $itemsTotal=[
-				['name'=>'sys-conf','value'=>0],
-				['name'=>'sys-env','value'=>0],
-				['name'=>'sys-serv','value'=>0],
-			]; */
-	private $itemsTotal=[
-				'system-conf'=>0,
-				'system-env'=>0,
-				'system-serv'=>0,
-			];
+    
+	const CATEGORY=['conf','env','serv'];
+	const ENT='system';
+	
+	private $brief=[];
+	private $data=[];
+	private $itemsTotal=[];
+	
+	private function _setBrief()
+	{
+		$arr=[
+			'name'=>self::CATEGORY,
+			'routeStr'=>[],
+			'total'=>[]
+		];
+		
+		foreach(self::CATEGORY as $key=>$val){
+			$param=$_SERVER;
+			if($val=='conf')$param=Config::get();
+			if($val=='env')$param=Env::get();
+			
+			$arr['routeStr'][$key]=self::ENT.'-'.$val;
+			$arr['total'][$key]=count($param);
+		}
+		
+		return $arr;
+		
+	}
 	
 	public function __construct()
 	{
-		$arr=$this->itemsTotal;
+
+		$this->brief=$this->_setBrief();
 		
-		$arr['system-conf']=count(fn_com_ksort_arr(Config::get()));
+		/* $arr['system-conf']=count(fn_com_ksort_arr(Config::get()));
 		$arr['system-env']=count(fn_com_ksort_arr(Env::get()));
 		$arr['system-serv']=count(fn_com_ksort_arr($_SERVER));
-		$this->itemsTotal=$arr;
+		 */
 		
-		return $this->itemsTotal;
+		$this->data=[
+			'ent' => self::ENT,
+			'sysEnt'=>'',
+			'fields'=>[],
+			'items'=>[]
+		];
+		
+		$this->itemsTotal=array_combine($this->brief['routeStr'],$this->brief['total']);
+			
+		//return json_encode($this->itemsTotal);
 		
 	}
 	
 	public function index()
     {
   		
-    	return json_encode(array_merge(['itemsTotal'=>$this->itemsTotal],$this->data));
+    	return json_encode(array_merge(
+									$this->data,
+									['itemsTotal'=>$this->itemsTotal],
+									['brief'=>$this->brief]
+								)
+							);
 
 	}
 	

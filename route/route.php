@@ -51,6 +51,9 @@ Route::group('supply',[
     ''=>'index',
 	'index'=>'index',
 	'pat'=>'pat',
+	'pro'=>'pro',
+	'sol'=>'sol',
+	'ach'=>'ach',
     	
 ])->method('GET|POST')
 	//admin模块/supply控制器/[操作]
@@ -63,6 +66,12 @@ Route::group('supply',[
 Route::group('demand',[
     ''=>'index',
 	'index'=>'index',
+	'com'=>'com',
+	'gov'=>'gov',
+	'edu'=>'edu',
+	'dev'=>'dev',
+	'ngo'=>'ngo',
+	'person'=>'person',
 	
     	
 ])->method('GET|POST')
@@ -89,6 +98,15 @@ Route::group('project',[
 Route::group('mentor',[
     ''=>'index',
 	'index'=>'index',
+	/* //研发
+	'res_des/[:type]'=>'res_des',
+	//管理
+	'manage/[:type]'=>'manage', */
+	'material'=>'material',
+	'computer'=>'computer',
+	'strategy'=>'strategy',
+	'finance'=>'finance',
+	'operation'=>'operation',
 	
     	
 ])->method('GET|POST')
@@ -102,7 +120,12 @@ Route::group('mentor',[
 Route::group('expert',[
     ''=>'index',
 	'index'=>'index',
-	
+	'com'=>'com',
+	'gov'=>'gov',
+	'edu'=>'edu',
+	'dev'=>'dev',
+	'ngo'=>'ngo',
+	'person'=>'person',
     	
 ])->method('GET|POST')
 	//admin模块/supply控制器/[操作]
