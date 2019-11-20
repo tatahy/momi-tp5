@@ -85,6 +85,10 @@ Route::group('demand',[
 Route::group('project',[
     ''=>'index',
 	'index'=>'index',
+	'com'=>'com',
+	'dev'=>'dev',
+	'ngo'=>'ngo',
+	'person'=>'person',
 	
     	
 ])->method('GET|POST')
