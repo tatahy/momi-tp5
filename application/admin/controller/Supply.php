@@ -16,48 +16,33 @@ class Supply extends Controller
 	
 	private $brief=[];
 	private $data=[];
-	private $itemsTotal=[];
 	
 	private function _setBrief()
 	{
-		$arr=[
-			'name'=>self::SYSENT,
-			'routeStr'=>[],
-			'total'=>[]
-		];
+		$arr=[];
+		$num=0;
 		
 		foreach(self::SYSENT as $key=>$val){
-			$param=Pat::getPatNum();
-			if($val=='pro')$param=0;
-			if($val=='sol')$param=0;
-			if($val=='ach')$param=0;
 			
-			$arr['routeStr'][$key]=self::ENT.'-'.$val;
-			$arr['total'][$key]=$param;
+			if($val=='pat')$num=Pat::getPatNum();
+			if($val=='pro')$num=0;
+			if($val=='sol')$num=0;
+			if($val=='ach')$num=0;
+			
+			$arr[$key]=[
+				'name'=>$val,	
+				'routeStr'=>self::ENT.'-'.$val,	
+				'total'=>$num,	
+			];
+			
 		}
 		
-		return $arr;
+		return ['items'=>$arr];
 		
 	}
 	
 	public function __construct()
 	{
-		/* $this->itemsTotal=[
-				'supply-pat'=>Pat::getPatNum(),
-				'supply-pro'=>0,
-				'supply-sol'=>0,
-				'supply-ach'=>0,
-			];
-			
-		$this->data=[
-				'ent' => 'supply',
-				'sysEnt'=>'',				
-				'fields'=>[],
-				'items'=>[]
-			];
-			
-		
-		return json_encode($this->itemsTotal); */
 		
 		$this->brief=$this->_setBrief();
 		
@@ -67,16 +52,13 @@ class Supply extends Controller
 			'fields'=>[],
 			'items'=>[]
 		];
-		
-		$this->itemsTotal=array_combine($this->brief['routeStr'],$this->brief['total']);
-		
+	
 	}
 	
 	public function index()
     {
   		return json_encode(array_merge(
 									$this->data,
-									['itemsTotal'=>$this->itemsTotal],
 									['brief'=>$this->brief]
 								)
 							);

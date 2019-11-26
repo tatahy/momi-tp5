@@ -24,7 +24,6 @@ class Demand extends Controller
 		
 	private $brief=[];
 	private $data=[];
-	private $itemsTotal=[];
 		
 	private function _getTypeDbValue($value='none')
 	{
@@ -35,18 +34,18 @@ class Demand extends Controller
 	
 	private function _setBrief()
 	{
-		$arr=[
-			'name'=>self::SYSENT,
-			'routeStr'=>[],
-			'total'=>[]
-		];
+		$arr=[];
+		$num=0;
 		
 		foreach(self::SYSENT as $key=>$val){
-			$arr['routeStr'][$key]=self::ENT.'-'.$val;
-			$arr['total'][$key]=0;
+			$arr[$key]=[
+				'name'=>$val,	
+				'routeStr'=>self::ENT.'-'.$val,	
+				'total'=>$num,	
+			];
 		}
 		
-		return $arr;
+		return ['items'=>$arr];
 		
 	}
 	
@@ -61,26 +60,12 @@ class Demand extends Controller
 			'items'=>[]
 		];
 		
-		/* $this->itemsTotal=[
-			'demand-com'=>0,
-			'demand-gov'=>0,
-			'demand-edu'=>0,
-			'demand-dev'=>0,
-			'demand-ngo'=>0,
-			'demand-person'=>0,
-		]; */
-		
-		$this->itemsTotal=array_combine($this->brief['routeStr'],$this->brief['total']);
-			
-		//return json_encode($this->itemsTotal);
-		
 	}
 	
 	public function index()
     {
   	   	return json_encode(array_merge(
 									$this->data,
-									['itemsTotal'=>$this->itemsTotal],
 									['brief'=>$this->brief]
 								)
 							);

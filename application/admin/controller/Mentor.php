@@ -22,8 +22,7 @@ class Mentor extends Controller
 		
 	private $brief=[];
 	private $data=[];
-	private $itemsTotal=[];
-		
+	
 	private function getTypeDbValue($value='none')
 	{
 		$key=array_search($value,self::TYPE);
@@ -33,18 +32,18 @@ class Mentor extends Controller
 	
 	private function _setBrief()
 	{
-		$arr=[
-			'name'=>self::CATEGORY,
-			'routeStr'=>[],
-			'total'=>[]
-		];
+		$arr=[];
+		$num=0;
 		
 		foreach(self::CATEGORY as $key=>$val){
-			$arr['routeStr'][$key]=self::ENT.'-'.$val;
-			$arr['total'][$key]=0;
+			$arr[$key]=[
+				'name'=>$val,	
+				'routeStr'=>self::ENT.'-'.$val,	
+				'total'=>$num,	
+			];
 		}
 		
-		return $arr;
+		return ['items'=>$arr];
 		
 	}
 	
@@ -58,8 +57,6 @@ class Mentor extends Controller
 			'fields'=>[],
 			'items'=>[]
 		];
-	
-		$this->itemsTotal=array_combine($this->brief['routeStr'],$this->brief['total']);
 		
 	}
 	
@@ -67,7 +64,6 @@ class Mentor extends Controller
     {
   		return json_encode(array_merge(
 									$this->data,
-									['itemsTotal'=>$this->itemsTotal],
 									['brief'=>$this->brief]
 								)
 							);

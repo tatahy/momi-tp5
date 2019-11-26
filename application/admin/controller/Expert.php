@@ -16,23 +16,21 @@ class Expert extends Controller
 	
 	private $brief=[];
 	private $data=[];
-	private $itemsTotal=[];
 	
 	private function _setBrief()
 	{
-		$arr=[
-			'name'=>self::SYSENT,
-			'routeStr'=>[],
-			'total'=>[]
-		];
+		$arr=[];
+		$num=0;
 		
 		foreach(self::SYSENT as $key=>$val){
-			$arr['routeStr'][$key]=self::ENT.'-'.$val;
-			$arr['total'][$key]=0;
+			$arr[$key]=[
+				'name'=>$val,	
+				'routeStr'=>self::ENT.'-'.$val,	
+				'total'=>$num,	
+			];
 		}
 		
-		return $arr;
-		
+		return ['items'=>$arr];
 	}
 	
 	public function __construct()
@@ -44,17 +42,14 @@ class Expert extends Controller
 			'sysEnt'=>'',
 			'fields'=>[],
 			'items'=>[]
-		];
-	
-		$this->itemsTotal=array_combine($this->brief['routeStr'],$this->brief['total']);
-			
+		];	
+		
 	}
 	
 	public function index()
     {
   	   	return json_encode(array_merge(
 									$this->data,
-									['itemsTotal'=>$this->itemsTotal],
 									['brief'=>$this->brief]
 								)
 							);

@@ -14,26 +14,25 @@ class System extends Controller
 	
 	private $brief=[];
 	private $data=[];
-	private $itemsTotal=[];
 	
 	private function _setBrief()
 	{
-		$arr=[
-			'name'=>self::CATEGORY,
-			'routeStr'=>[],
-			'total'=>[]
-		];
+		$arr=[];
+		$num=0;
 		
 		foreach(self::CATEGORY as $key=>$val){
-			$param=$_SERVER;
-			if($val=='conf')$param=Config::get();
-			if($val=='env')$param=Env::get();
+			if($val=='serv')$num=count($_SERVER);
+			if($val=='conf')$num=count(Config::get());
+			if($val=='env')$num=count(Env::get());
 			
-			$arr['routeStr'][$key]=self::ENT.'-'.$val;
-			$arr['total'][$key]=count($param);
+			$arr[$key]=[
+				'name'=>$val,	
+				'routeStr'=>self::ENT.'-'.$val,	
+				'total'=>$num,	
+			];
 		}
 		
-		return $arr;
+		return ['items'=>$arr];
 		
 	}
 	
@@ -42,21 +41,12 @@ class System extends Controller
 
 		$this->brief=$this->_setBrief();
 		
-		/* $arr['system-conf']=count(fn_com_ksort_arr(Config::get()));
-		$arr['system-env']=count(fn_com_ksort_arr(Env::get()));
-		$arr['system-serv']=count(fn_com_ksort_arr($_SERVER));
-		 */
-		
 		$this->data=[
 			'ent' => self::ENT,
 			'sysEnt'=>'',
 			'fields'=>[],
 			'items'=>[]
 		];
-		
-		$this->itemsTotal=array_combine($this->brief['routeStr'],$this->brief['total']);
-			
-		//return json_encode($this->itemsTotal);
 		
 	}
 	
@@ -65,7 +55,6 @@ class System extends Controller
   		
     	return json_encode(array_merge(
 									$this->data,
-									['itemsTotal'=>$this->itemsTotal],
 									['brief'=>$this->brief]
 								)
 							);
