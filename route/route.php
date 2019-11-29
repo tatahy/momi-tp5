@@ -111,7 +111,6 @@ Route::group('mentor',[
 	'strategy'=>'strategy',
 	'finance'=>'finance',
 	'operation'=>'operation',
-	
     	
 ])->method('GET|POST')
 	//admin模块/supply控制器/[操作]

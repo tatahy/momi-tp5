@@ -2,10 +2,9 @@
 namespace app\admin\controller;
 
 use think\Controller;
-use think\facade\Config;
-use think\facade\Env;
 use think\Request;
 
+use app\mentor\model\MentorInfo as Men;
 
 class Mentor extends Controller
 {
@@ -17,25 +16,38 @@ class Mentor extends Controller
 			'_TYPE3'=>'strategy',
 			'_TYPE4'=>'finance',
 			'_TYPE5'=>'operation',
-			'_NONE'=>'none',
 		];
 		
 	private $brief=[];
 	private $data=[];
 	
-	private function getTypeDbValue($value='none')
+	private function _getTypeDbValue($value='')
 	{
-		$key=array_search($value,self::TYPE);
-		
+		if(in_array($value,self::TYPE)){
+			$key=array_search($value,self::TYPE);
+		}else{
+			$key='_TYPE1';
+		}
 		return $key;
 	}
 	
 	private function _setBrief()
 	{
 		$arr=[];
-		$num=0;
+		$num=10;
+		$type='_';
 		
 		foreach(self::CATEGORY as $key=>$val){
+			$type=$this->_getTypeDbValue($val);
+			
+			//$num=$type;
+			
+			/* if($val=='material'){
+				$num=Men::getMenNum($type);
+			} */
+			
+			$num=Men::getMenNum($type);
+			
 			$arr[$key]=[
 				'name'=>$val,	
 				'routeStr'=>self::ENT.'-'.$val,	
@@ -71,35 +83,36 @@ class Mentor extends Controller
 	
 	public function material()
     {
-    	$result= array_merge($this->data,['sysEnt'=>'person']);   
+    	$type=$this->_getTypeDbValue(self::CATEGORY[0]);
+		$result= array_merge($this->data,Men::getMenList($type));   
 		
         return json_encode($result);
     }
 
     public function computer(Request $request)
     {
-    	$result= array_merge($this->data,['sysEnt'=>'person']); 
+    	$result= array_merge($this->data,['sysEnt'=>'mentor']); 
 		
         return json_encode($result);
     }
 	
 	public function strategy(Request $request)
     {
-    	$result= array_merge($this->data,['sysEnt'=>'person']);
+    	$result= array_merge($this->data,['sysEnt'=>'mentor']);
 		
         return json_encode($result);
     }
 	
 	public function finance(Request $request)
     {
-    	$result= array_merge($this->data,['sysEnt'=>'person']);
+    	$result= array_merge($this->data,['sysEnt'=>'mentor']);
 		
         return json_encode($result);
     }
 	
 	public function operation(Request $request)
     {
-    	$result= array_merge($this->data,['sysEnt'=>'person']);
+    	$result= array_merge($this->data,['sysEnt'=>'mentor']);
 		
         return json_encode($result);
     }
