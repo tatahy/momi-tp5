@@ -14,10 +14,9 @@ class Supply extends Controller
     const SYSENT=['pat','pro','sol','ach'];
 	const ENT='supply';
 	
-	private $brief=[];
 	private $data=[];
 	
-	private function _setBrief()
+	private function _setDataItems()
 	{
 		$arr=[];
 		$num=0;
@@ -37,32 +36,25 @@ class Supply extends Controller
 			
 		}
 		
-		return ['items'=>$arr];
+		return $arr;
 		
 	}
 	
 	public function __construct()
 	{
-		
-		$this->brief=$this->_setBrief();
-		
 		$this->data=[
 			'ent' => self::ENT,
 			'sysEnt'=>'',
 			'fields'=>[],
-			'items'=>[]
+			'items'=>$this->_setDataItems(),
+			'lists'=>[]
 		];
 	
 	}
 	
 	public function index()
     {
-  		return json_encode(array_merge(
-									$this->data,
-									['brief'=>$this->brief]
-								)
-							);
-
+		return json_encode($this->data);
 	}
 	
 	public function pat()

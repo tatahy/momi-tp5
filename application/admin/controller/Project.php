@@ -19,7 +19,6 @@ class Project extends Controller
 			'_NONE'=>'none',
 		];
 	
-	private $brief=[];
 	private $data=[];
 	
 	private function getTypeDbValue($value='none')
@@ -29,7 +28,7 @@ class Project extends Controller
 		return $key;
 	}
 	
-	private function _setBrief()
+	private function _setDataItems()
 	{
 		$arr=[];
 		$num=0;
@@ -42,30 +41,25 @@ class Project extends Controller
 			];
 		}
 		
-		return ['items'=>$arr];
+		return $arr;
 		
 	}
 	
 	public function __construct()
 	{
-		$this->brief=$this->_setBrief();
-		
 		$this->data=[
 			'ent' => self::ENT,
 			'sysEnt'=>'',
 			'fields'=>[],
-			'items'=>[]
+			'items'=>$this->_setDataItems(),
+			'lists'=>[]
 		];
 		
 	}
 	
 	public function index()
     {
-  		return json_encode(array_merge(
-									$this->data,
-									['brief'=>$this->brief]
-								)
-							);
+  		return json_encode($this->data);
 	}
 	
 	public function com(Request $request)

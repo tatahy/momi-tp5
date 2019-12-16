@@ -12,10 +12,9 @@ class System extends Controller
 	const CATEGORY=['conf','env','serv'];
 	const ENT='system';
 	
-	private $brief=[];
 	private $data=[];
 	
-	private function _setBrief()
+	private function _setDataItems()
 	{
 		$arr=[];
 		$num=0;
@@ -32,20 +31,18 @@ class System extends Controller
 			];
 		}
 		
-		return ['items'=>$arr];
+		return $arr;
 		
 	}
 	
 	public function __construct()
 	{
-
-		$this->brief=$this->_setBrief();
-		
 		$this->data=[
 			'ent' => self::ENT,
 			'sysEnt'=>'',
 			'fields'=>[],
-			'items'=>[]
+			'items'=>$this->_setDataItems(),
+			'lists'=>[]
 		];
 		
 	}
@@ -53,11 +50,7 @@ class System extends Controller
 	public function index()
     {
   		
-    	return json_encode(array_merge(
-									$this->data,
-									['brief'=>$this->brief]
-								)
-							);
+    	return json_encode($this->data);
 
 	}
 	
@@ -66,7 +59,10 @@ class System extends Controller
         //读取所有的配置参数
         //return dump(Config::get());
         $arr=fn_com_ksort_arr(Config::get());
-        return json_encode($arr);
+		//return json_encode($arr);
+		$this->data['lists']=$arr;
+        
+        return json_encode($this->data);
     }
 
     public function env()
@@ -74,7 +70,10 @@ class System extends Controller
         //读取所有的环境变量
         //return dump(Env::get());
         $arr=fn_com_ksort_arr(Env::get());
-        return json_encode($arr);
+        //return json_encode($arr);
+		$this->data['lists']=$arr;
+        
+        return json_encode($this->data);
     }
 
     public function serv()
@@ -82,6 +81,9 @@ class System extends Controller
         //读取所有的服务器参数
         //return dump($_SERVER);
         $arr=fn_com_ksort_arr($_SERVER);
-        return json_encode($arr);
+        //return json_encode($arr);
+		$this->data['lists']=$arr;
+        
+        return json_encode($this->data);
     }
 }

@@ -43,36 +43,36 @@ class MentorInfo extends Model
     static public function getMenList($type='')
     {
        
-		$list = [
+		$res = [
 			'sysEnt'=>'mentor',
 			'fields'=>['id','name', 'type', 'title', 'position', 'field', 'research','profile', 'experience'],
-			'items'=>[]
+			'lists'=>[]
 		];
 		
 		$type=in_array($type,self::TYPE)?$type:'';
 		
         self::$obj = new self();
 
-        //$list=self::$obj->all();
-        //$list=self::$obj->all()->visible(['patnum','topic','type']);
+        //$res=self::$obj->all();
+        //$res=self::$obj->all()->visible(['patnum','topic','type']);
         
-        //$list = self::$obj->field(['patnum'=>'专利编号', 'topic' => '标题', 'type' => '类型', 'patowner' =>
+        //$res = self::$obj->field(['patnum'=>'专利编号', 'topic' => '标题', 'type' => '类型', 'patowner' =>
 //            '所有人', 'inventor' => '发明人', 'author' => '作者'])->order('patnum', 'asc')->select();
 
 
 //            '专利编号'=='\x4E13\x5229\x7F16\x53F7'
-        //$list = self::$obj->field(['patnum'=>'bb', 'topic', 'type', 'patowner', 'inventor', 'author'])->order('patnum', 'asc')->select();
+        //$res = self::$obj->field(['patnum'=>'bb', 'topic', 'type', 'patowner', 'inventor', 'author'])->order('patnum', 'asc')->select();
             
-        $list['items'] = self::$obj
-				->field($list['fields'])
+        $res['lists'] = self::$obj
+				->field($res['fields'])
 				->where('type',$type)
 				->order('name', 'asc')
 				->select();
         //获取数据表的全部字段
-        //$list=self::$obj->field(true)->order('patnum','asc')->select();
+        //$res=self::$obj->field(true)->order('patnum','asc')->select();
         self::$obj = null;
 
-        return $list;
+        return $res;
     }
 }
 

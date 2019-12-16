@@ -18,7 +18,6 @@ class Mentor extends Controller
 			'_TYPE5'=>'operation',
 		];
 		
-	private $brief=[];
 	private $data=[];
 	
 	private function _getTypeDbValue($value='')
@@ -31,7 +30,7 @@ class Mentor extends Controller
 		return $key;
 	}
 	
-	private function _setBrief()
+	private function _setDataItems()
 	{
 		$arr=[];
 		$num=10;
@@ -55,30 +54,25 @@ class Mentor extends Controller
 			];
 		}
 		
-		return ['items'=>$arr];
+		return $arr;
 		
 	}
 	
 	public function __construct()
 	{
-		$this->brief=$this->_setBrief();
 		
 		$this->data=[
 			'ent' => self::ENT,
 			'sysEnt'=>'',
 			'fields'=>[],
-			'items'=>[]
+			'items'=>$this->_setDataItems()
 		];
 		
 	}
 	
 	public function index()
     {
-  		return json_encode(array_merge(
-									$this->data,
-									['brief'=>$this->brief]
-								)
-							);
+  		return json_encode($this->data);
 	}
 	
 	public function material()

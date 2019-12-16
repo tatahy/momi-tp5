@@ -14,10 +14,10 @@ class Expert extends Controller
     const ENT='expert';
 	const SYSENT=['com','gov','edu','dev','ngo','person'];
 	
-	private $brief=[];
+	
 	private $data=[];
 	
-	private function _setBrief()
+	private function _setDataItems()
 	{
 		$arr=[];
 		$num=0;
@@ -30,29 +30,24 @@ class Expert extends Controller
 			];
 		}
 		
-		return ['items'=>$arr];
+		return $arr;
 	}
 	
 	public function __construct()
 	{
-		$this->brief=$this->_setBrief();
-		
 		$this->data=[
 			'ent' => self::ENT,
 			'sysEnt'=>'',
 			'fields'=>[],
-			'items'=>[]
+			'items'=>$this->_setDataItems(),
+			'lists'=>[]
 		];	
 		
 	}
 	
 	public function index()
     {
-  	   	return json_encode(array_merge(
-									$this->data,
-									['brief'=>$this->brief]
-								)
-							);
+  	   	return json_encode($this->data);
 	}
 	
 	public function com(Request $request)
