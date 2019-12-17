@@ -25,7 +25,7 @@ class System extends Controller
 			if($val=='env')$num=count(Env::get());
 			
 			$arr[$key]=[
-				'name'=>$val,	
+				'key'=>$val,	
 				'routeStr'=>self::ENT.'-'.$val,	
 				'total'=>$num,	
 			];
@@ -34,7 +34,18 @@ class System extends Controller
 		return $arr;
 		
 	}
-	
+	private function _setListsArr($arr)
+	{
+		$arr=fn_com_ksort_arr($arr);
+		
+		$this->data['lists']=[];
+		foreach($arr as $key=>$val){
+			array_push($this->data['lists'], ['key'=>$key,'value'=>$val]);
+			
+		}
+		
+		return $this->data['lists'];
+	}
 	public function __construct()
 	{
 		$this->data=[
@@ -57,10 +68,10 @@ class System extends Controller
 	public function conf()
     {
         //读取所有的配置参数
-        //return dump(Config::get());
-        $arr=fn_com_ksort_arr(Config::get());
-		//return json_encode($arr);
-		$this->data['lists']=$arr;
+        /* $arr=fn_com_ksort_arr(Config::get());
+		$this->data['lists']=$arr; */
+		
+		$this->_setListsArr(Config::get());
         
         return json_encode($this->data);
     }
@@ -68,11 +79,11 @@ class System extends Controller
     public function env()
     {
         //读取所有的环境变量
-        //return dump(Env::get());
-        $arr=fn_com_ksort_arr(Env::get());
-        //return json_encode($arr);
-		$this->data['lists']=$arr;
+        /* $arr=fn_com_ksort_arr(Env::get());
+		$this->data['lists']=$arr; */
         
+		$this->_setListsArr(Env::get());
+		
         return json_encode($this->data);
     }
 
@@ -80,10 +91,10 @@ class System extends Controller
     {
         //读取所有的服务器参数
         //return dump($_SERVER);
-        $arr=fn_com_ksort_arr($_SERVER);
-        //return json_encode($arr);
-		$this->data['lists']=$arr;
+        /* $arr=fn_com_ksort_arr($_SERVER);
+		$this->data['lists']=$arr; */
         
+		$this->_setListsArr($_SERVER);
         return json_encode($this->data);
     }
 }

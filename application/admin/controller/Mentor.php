@@ -65,7 +65,8 @@ class Mentor extends Controller
 			'ent' => self::ENT,
 			'sysEnt'=>'',
 			'fields'=>[],
-			'items'=>$this->_setDataItems()
+			'items'=>$this->_setDataItems(),
+			'lists'=>[]
 		];
 		
 	}
