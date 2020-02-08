@@ -50,7 +50,8 @@ Route::group('system',[
 Route::group('supply',[
     ''=>'index',
 	'index'=>'index',
-	'pat'=>'pat',
+	'pat/[:oprt]'=>'pat',
+	//'pat'=>'pat',
 	'pro'=>'pro',
 	'sol'=>'sol',
 	'ach'=>'ach',
@@ -60,6 +61,10 @@ Route::group('supply',[
 	->prefix('admin/supply/')
   	->header('Access-Control-Allow-Origin','*')
   	->header('Access-Control-Allow-Credentials', 'true')
+  	//->header('Content-Type','application/json')
+  	//->header('Content-Type','application/x-www-form-urlencoded;charset=UTF-8')
+  	//->header('Content-Type','multipart/form-data;boundary='.'---xx')
+  	//->header('Content-Type','multipart/form-data')
   	->allowCrossDomain();
 	
 //解析前端发送的由‘demand’发起的路由字符串	
@@ -71,9 +76,7 @@ Route::group('demand',[
 	'edu'=>'edu',
 	'dev'=>'dev',
 	'ngo'=>'ngo',
-	'person'=>'person',
-	
-    	
+	'person'=>'person',   	
 ])->method('GET|POST')
 	//admin模块/supply控制器/[操作]
 	->prefix('admin/demand/')
@@ -106,11 +109,11 @@ Route::group('mentor',[
 	'res_des/[:type]'=>'res_des',
 	//管理
 	'manage/[:type]'=>'manage', */
-	'material'=>'material',
-	'computer'=>'computer',
-	'strategy'=>'strategy',
-	'finance'=>'finance',
-	'operation'=>'operation',
+	'material/[:oprt]'=>'material',
+	'computer/[:oprt]'=>'computer',
+	'strategy/[:oprt]'=>'strategy',
+	'finance/[:oprt]'=>'finance',
+	'operation/[:oprt]'=>'operation',
     	
 ])->method('GET|POST')
 	//admin模块/supply控制器/[操作]

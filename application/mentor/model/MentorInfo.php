@@ -16,20 +16,25 @@ class MentorInfo extends Model
 	//直接使用本模块中的数据库配置参数名
     protected $connection = 'db_mentor';
 	
-	const TYPE=['_TYPE1','_TYPE2','_TYPE3','_TYPE4','_TYPE5'];
+	//开启自动写入创建和更新的时间戳字段
+	//自动写入create_time和update_time两个字段的值，默认为整型（int）
+	//时间字段的自动写入仅针对模型的写入方法，如果使用数据库的更新或者写入方法则无效。
+	protected $autoWriteTimestamp = true;
+	
+	const TYPES=['_TYPE1','_TYPE2','_TYPE3','_TYPE4','_TYPE5'];
+	const FIELDS=['material','computer','strategy','finance','operation'];
 
     //本类的静态方法中用于访问非静态方法时实例化本类对象
     static private $obj = null;
 	
-	static public function getMenNum($type='')
+	static public function getMenNum($field='')
 	{
-		$typeArr=['_TYPE1','_TYPE2','_TYPE3','_TYPE4','_TYPE5'];
-		$num = $type;
+		$num = $field;
 		
 		self::$obj = new self();
 		
-		if(in_array($type,self::TYPE)){
-			$num = self::$obj->where('type',$type)->count();
+		if(in_array($field,self::FIELDS)){
+			$num = self::$obj->where('field',$field)->count();
 			//$num = self::$obj->count();
 		}else{
 			$num = self::$obj->count();
@@ -40,36 +45,30 @@ class MentorInfo extends Model
 		return $num;
 	}
 
-    static public function getMenList($type='')
+    static public function getMenList($field='')
     {
        
 		$res = [
 			'sysEnt'=>'mentor',
+			//返回前端的字段
 			'fields'=>['id','name', 'type', 'title', 'position', 'field', 'research','profile', 'experience'],
 			'lists'=>[]
 		];
 		
-		$type=in_array($type,self::TYPE)?$type:'';
+		$field=in_array($field,self::FIELDS)?$field:'';
 		
         self::$obj = new self();
 
-        //$res=self::$obj->all();
-        //$res=self::$obj->all()->visible(['patnum','topic','type']);
-        
-        //$res = self::$obj->field(['patnum'=>'专利编号', 'topic' => '标题', 'type' => '类型', 'patowner' =>
-//            '所有人', 'inventor' => '发明人', 'author' => '作者'])->order('patnum', 'asc')->select();
-
-
-//            '专利编号'=='\x4E13\x5229\x7F16\x53F7'
-        //$res = self::$obj->field(['patnum'=>'bb', 'topic', 'type', 'patowner', 'inventor', 'author'])->order('patnum', 'asc')->select();
-            
         $res['lists'] = self::$obj
 				->field($res['fields'])
-				->where('type',$type)
+				->where('field',$field)
 				->order('name', 'asc')
 				->select();
-        //获取数据表的全部字段
-        //$res=self::$obj->field(true)->order('patnum','asc')->select();
+        
+		/* //获取数据表的全部字段
+        $res=self::$obj->field(true)->order('patnum','asc')->select(); */
+		
+		
         self::$obj = null;
 
         return $res;

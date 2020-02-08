@@ -13,6 +13,7 @@ class Supply extends Controller
 {
     const SYSENT=['pat','pro','sol','ach'];
 	const ENT='supply';
+	const CURD=['create','update','retrieve','delete'];
 	
 	private $data=[];
 	
@@ -57,12 +58,48 @@ class Supply extends Controller
 		return json_encode($this->data);
 	}
 	
-	public function pat()
+	//pat的CURD
+	public function pat(Request $res,$oprt='retrieve')
     {
-    	 
-    	$result= array_merge($this->data,Pat::getPatList());   
+    	$oprt=in_array($oprt,self::CURD)?$oprt:'retrieve';
+		$result=[
+			'routeStr'=>self::ENT.'-'.'patent',
+			'oprt'=>$oprt,
+			'success'=>false,
+		];
 		
-        return json_encode($result);
+		
+				
+		if($oprt=='retrieve'){
+			$result['success']=true;
+			$result=array_merge($result,$this->data,Pat::getPatList());
+			
+		}
+		
+		if($oprt=='update'){
+			/* $id=$res->post('id');
+			$arr=$res->post();
+			
+			if($id){
+				unset($arr['id'])
+				
+				$success=Pat::where('id',$res->post('id'))->update($res->post('id'));
+			
+				$result['success']=$success?true:false;
+				
+			} */
+		
+		//$result=array_merge(['oprt'=>$oprt],['id'=>$res->param('id')]);
+			//$result=$res->post();
+			
+			//$result=Pat::update($res->post());
+			$success=Pat::where('id',$res->post('id'))->update($res->post());
+			
+			$result['success']=$success?true:false;
+			
+		}
+	
+		return json_encode($result);
     }
 
     public function pro()
