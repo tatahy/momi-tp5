@@ -65,7 +65,7 @@ class Mentor extends Controller
 		
 		$post=$this->reqData;
 		
-		$id=array_key_exists('id',$post)?$post['id']:0;
+		$id=0;
 		
 		$success=false;
 		
@@ -87,6 +87,7 @@ class Mentor extends Controller
 		
 		
 		if(array_key_exists('id',$post)){
+			$id=$post['id'];
 			unset($post['id']);
 		}
 		
@@ -125,7 +126,8 @@ class Mentor extends Controller
 			
 		}
 		$result['success']=$success?true:false;	
-		$result=array_merge($result,['successValue'=>$success]);
+		
+		//$result=array_merge($result,['successValue'=>$success]);
 		
 		//清除模型对象实例
 		$mentor=null;

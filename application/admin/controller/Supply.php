@@ -59,46 +59,60 @@ class Supply extends Controller
 	}
 	
 	//pat的CURD
-	public function pat(Request $res,$oprt='retrieve')
+	public function pat(Request $req,$oprt='')
     {
     	$oprt=in_array($oprt,self::CURD)?$oprt:'retrieve';
 		$result=[
-			'routeStr'=>self::ENT.'-'.'patent',
+			'routeStr'=>self::ENT.'-'.'pat',
 			'oprt'=>$oprt,
 			'success'=>false,
 		];
 		
+		$post=$req->post();
+		$id=0;
+		$success=false;
 		
+		if(array_key_exists('id',$post)){
+			$id=$post['id'];
+			unset($post['id']);
+		}
+		
+		//模型对象实例
+		$pat=new Pat;
 				
 		if($oprt=='retrieve'){
-			$result['success']=true;
-			$result=array_merge($result,$this->data,Pat::getPatList());
+			$success=true;
+			$result=array_merge($result,$this->data,$pat->getPatList());
 			
 		}
 		
 		if($oprt=='update'){
-			/* $id=$res->post('id');
-			$arr=$res->post();
+			//模型的静态update方法更新，返回模型的对象实例
+			//$success=Men::update($post);
+			//模型的静态方法调用数据库方法update()返回的是受影响的记录数
+			//$success=Pat::where('id',$post('id'))->update($post);
 			
-			if($id){
-				unset($arr['id'])
-				
-				$success=Pat::where('id',$res->post('id'))->update($res->post('id'));
-			
-				$result['success']=$success?true:false;
-				
-			} */
-		
-		//$result=array_merge(['oprt'=>$oprt],['id'=>$res->param('id')]);
-			//$result=$res->post();
-			
-			//$result=Pat::update($res->post());
-			$success=Pat::where('id',$res->post('id'))->update($res->post());
-			
-			$result['success']=$success?true:false;
+			//模型对象调用数据库方法update()返回的是受影响的记录数
+			$success=$pat->where('id',$id)->update($post);
 			
 		}
-	
+		
+		if($oprt=='create'){
+			
+			/* 
+			//模型的静态方法create()返回模型的对象实例
+			$mentor = Men::create($post, true);
+			$success=$mentor->id?true:false;
+			 */
+			//模型对象的save()方法新增返回的是写入的记录数（通常是1），而不是自增主键值。
+			$success=$pat->allowField(true)->save($post);
+			
+		}
+		
+		$result['success']=$success?true:false;	
+		//清除模型对象实例
+		$pat=null;
+		
 		return json_encode($result);
     }
 

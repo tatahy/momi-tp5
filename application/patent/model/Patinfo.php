@@ -13,9 +13,41 @@ class Patinfo extends Model
 {
     //直接使用本模块中的数据库配置参数名
     protected $connection = 'db_remote';
+	
+	protected $insert = ['patnum'];
+	//只读字段，这个字段的值一旦写入，就无法更改。
+    protected $readonly = ['patnum'];
+	//时间字段的自动写入仅针对模型的写入方法，如果使用数据库的更新或者写入方法则无效。
+	protected $autoWriteTimestamp = true;
 
     //本类的静态方法中用于访问非静态方法时实例化本类对象
     static private $obj = null;
+	
+	//设置patnum字段的值为pat+yyyy+0000的形式，即是在当年进行流水编号
+    protected function setPatnumAttr()
+    {
+
+        $idmax = Patinfo::max('id');
+        $value = Patinfo::where('id', $idmax)->value('patnum');
+
+        $year = substr($value, 3, 4);
+        $num = substr($value, 3) + 1;
+
+        if ($year == date('Y')) {
+            $result = "pat".$num;
+        } else {
+            $result = "pat".date('Y')."0001";
+        }
+
+        return ($result);
+    }
+	
+	//修改器，修改存入数据表patinfo中status字段值，转换为类型编码。
+    protected function setStatusAttr($key)
+    {
+      
+        return '*';
+    }
 	
 	static public function getPatNum()
 	{
