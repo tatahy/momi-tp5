@@ -114,6 +114,7 @@ Route::group('mentor',[
 	'strategy/[:oprt]'=>'strategy',
 	'finance/[:oprt]'=>'finance',
 	'operation/[:oprt]'=>'operation',
+	'uploadFile/[:id]'=>'uploadPicture',
     	
 ])->method('GET|POST')
 	//admin模块/supply控制器/[操作]
@@ -139,6 +140,20 @@ Route::group('expert',[
   	->header('Access-Control-Allow-Origin','*')
   	->header('Access-Control-Allow-Credentials', 'true')
   	->allowCrossDomain();
+	
+//解析前端发送的由‘uploads’发起的路由字符串	
+/* Route::group('uploads',[
+    ''=>'index',
+    '/'=>'index',
+	'index'=>'index',
+	'pictures/[:type]'=>'picture',
+	    	
+])->method('GET|POST')
+	//uploads模块/index控制器/[操作]
+	->prefix('uploads/index/')
+  	->header('Access-Control-Allow-Origin','*')
+  	->header('Access-Control-Allow-Credentials', 'true')
+  	->allowCrossDomain(); */
   
 ////支持跨域请求
 //Route::get('conf', 'index/appConfig')

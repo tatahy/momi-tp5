@@ -13,7 +13,7 @@ class MentorInfo extends Model
 {
     
 	
-	//直接使用本模块中的数据库配置参数名
+	//直接使用本模块中的数据库配置参数
     protected $connection = 'db_mentor';
 	
 	//开启自动写入创建和更新的时间戳字段
@@ -21,15 +21,19 @@ class MentorInfo extends Model
 	//时间字段的自动写入仅针对模型的写入方法，如果使用数据库的更新或者写入方法则无效。
 	protected $autoWriteTimestamp = true;
 	
+	// 设置json类型字段
+	protected $json = ['picture'];
+	
 	const TYPES=['_TYPE1','_TYPE2','_TYPE3','_TYPE4','_TYPE5'];
 	const FIELDS=['material','computer','strategy','finance','operation'];
-
+	const RESFIELDS=['id','name', 'picture', 'type', 'title', 'position', 'field', 'research','profile', 'experience','award','patent','thesis','writing','project'];
+	
     //本类的静态方法中用于访问非静态方法时实例化本类对象
     static private $obj = null;
 	
 	static public function getMenNum($field='')
 	{
-		$num = $field;
+		$num = 0;
 		
 		self::$obj = new self();
 		
@@ -48,10 +52,11 @@ class MentorInfo extends Model
     static public function getMenList($field='')
     {
        
+		$resFields=self::RESFIELDS;
 		$res = [
 			'sysEnt'=>'mentor',
 			//返回前端的字段
-			'fields'=>['id','name', 'type', 'title', 'position', 'field', 'research','profile', 'experience'],
+			'fields'=>$resFields,
 			'lists'=>[]
 		];
 		
@@ -60,7 +65,7 @@ class MentorInfo extends Model
         self::$obj = new self();
 
         $res['lists'] = self::$obj
-				->field($res['fields'])
+				->field($resFields)
 				->where('field',$field)
 				->order('name', 'asc')
 				->select();
@@ -73,6 +78,25 @@ class MentorInfo extends Model
 
         return $res;
     }
+	
+	public function uploadPicture($id=0,$pic)
+	{
+		$result=false;
+		
+		if($id){
+			
+			//模型对象的save()方法带更新条件来更新数据,返回的bool值
+			//$result=$this->isUpdate(true)->save(['id' => $id, 'picture' => $pic]);
+			
+			//save方法带条件跟新，第二参数是更新条件
+			$result=$this->isUpdate(true)->save(['picture' => $pic],['id' => $id]);
+			
+			
+			//数据库的update方法返回影响的记录数
+			//$result=$this->where('id', $id)->update(['picture' => $pic]);
+		}
+		return $result?true:false;
+	}
 }
 
 ?>

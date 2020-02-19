@@ -209,6 +209,71 @@ class Mentor extends Controller
         return json_encode($result);
     }
 	
-	
+	public function uploadPicture(Request $req,$id=0)
+	{
+		//‘.’表示与入口文件在同一级目录
+		$dir='./uploads/pictures/mentor/';
+		//‘..’表示与在入口文件的上一级目录
+		//$dir='../uploads/pictures/mentor/';
+		$resInfo=[
+			'success'=>false,
+			'ext'=>'',
+			'dir'=>'',
+			'name'=>'',
+			'error'=>''
+		];
+		$file ='';
+		$info ='';
+		
+		$flag=false;
+		//模型对象实例
+		$mentor = new Men;
+		
+		if($id){
+			// 获取表单上传文件
+			$file = $req->file('fileObj');
+					
+			$info = $file
+					//有效性验证，size规定允许的最大字节数256KB=262144B
+					//ext规定后缀名，//不通过就返回false
+					->validate(['size'=>262144,'ext'=>'jpg,png,gif,jpeg'])
+					//使用uniqid规则创建文件名
+					//->rule('uniqid')
+					//移动到服务器的上传目录
+					//->move($dir);
+					// 移动到服务器的上传目录 并且使用原文件名
+					->move($dir,'');
+		}
+		
+		if($info){
+			$flag=true;
+			//去掉$dir中的‘.’或‘..’
+			$dir=strstr($dir,'/');
+			$resInfo['dir']=$dir;
+			//得到后缀名
+			$resInfo['ext']=strtolower($info->getExtension());
+			// 输出 20160820/42a79759f284b767dfcb2a0197904287.jpg
+			//$info->getSaveName();
+			//得到上传目录里的完整文件名
+			$resInfo['name']=$info->getFilename(); 
+			
+		}else{
+			// 上传失败获取错误信息
+			$resInfo['error']=$file->getError();
+		}
+		
+		//写入数据库，文件所在目录及文件名
+		if($flag){
+			
+			$flag=$mentor->uploadPicture($id,['dir'=>$dir,'name'=>$resInfo['name']]);
+		}
+			
+		$resInfo['success']=$flag?true:false;
+		
+		//释放对象实例
+		$mentor = null;
+		
+		return json_encode($resInfo);
+	}
 	
 }
