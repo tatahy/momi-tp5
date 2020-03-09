@@ -9,6 +9,8 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
+use think\facade\Route;
+
 Route::get('think', function () {
     return 'hello,ThinkPHP5!';
 });
@@ -16,7 +18,7 @@ Route::get('think', function () {
 Route::get('hello/[:name]', 'index/hello');
 
 //首页的路由
-Route::get('/', 'index/index');
+Route::any('/', 'index/index');
 
 Route::get('demo', 'index/demo');
 
@@ -125,7 +127,8 @@ Route::group('mentor',[
 	
 //解析前端发送的由‘expert’发起的路由字符串	
 Route::group('expert',[
-    ''=>'index',
+	
+	'/'=>'index',
 	'index'=>'index',
 	'com'=>'com',
 	'gov'=>'gov',
@@ -141,7 +144,29 @@ Route::group('expert',[
   	->header('Access-Control-Allow-Credentials', 'true')
   	->allowCrossDomain();
 	
-//解析前端发送的由‘uploads’发起的路由字符串	
+// // 解析前端发送的由‘emqx’发起的路由字符串，不区分大小写
+// Route::group('emqx',[
+// 	// '/'=>'index',//与下一行的结果相同
+// 	//''=>'index',
+// 	//'$'：表示完全匹配'$'之前的字符串
+// 	'httpapi$'=>'index'
+// ])->method('GET|POST')
+// 	//emqx模块/httpapi控制器/[操作]
+// 	->prefix('emqx/httpapi/')
+//   	->header('Access-Control-Allow-Origin','*')
+//   	->header('Access-Control-Allow-Credentials', 'true')
+// 	->allowCrossDomain(); 
+
+//路由规则：前端发送的‘emqx/httpapi’路由字符串(不区分大小写index，接受跨域请求，只接受POST方法)
+//路由到emqx模块/httpapi控制器/index操作
+Route::rule('emqx/httpapi$','emqx/httpapi/index')
+	->method('POST')
+  	->header('Access-Control-Allow-Origin','*')
+  	->header('Access-Control-Allow-Credentials', 'true')
+  	->allowCrossDomain(); 
+  
+
+//解析前端发送的由‘uploads’发起的路由字符串	，不区分大小写
 /* Route::group('uploads',[
     ''=>'index',
     '/'=>'index',
@@ -179,7 +204,8 @@ Route::group('expert',[
 //      ->header('Access-Control-Allow-Credentials', 'true')
 //      ->allowCrossDomain();
 
-//设置全局MISS路由
+//设置全局MISS路由，一旦设置了MISS路由，相当于开启了强制路由模式
+//必须严格给每一个访问地址定义路由规则（包括首页），否则将抛出异常。
 Route::miss(function() {
   return '<br><h1 style="text-align:center"> 404 not found!</h1>';
 });
